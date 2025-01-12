@@ -203,7 +203,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
     .addColumn("submission_id", "uuid", (col) => col.notNull().references("submissions.id"))
     .addColumn("verdict", "text")
-    .addColumn("raw_score", "real")
+    .addColumn("score_raw", "real")
     .addColumn("is_official", "boolean")
     .addColumn("running_time_ms", "integer")
     .addColumn("running_memory_byte", "integer")
@@ -217,7 +217,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn("verdict_id", "uuid", (col) => col.notNull().references("verdicts.id").onDelete('cascade'))
     .addColumn("subtask_id", "uuid", (col) => col.notNull().references("task_subtasks.id").onDelete('cascade'))
     .addColumn("verdict", "text")
-    .addColumn("raw_score", "real")
+    .addColumn("score_raw", "real")
     .addColumn("running_time_ms", "integer")
     .addColumn("running_memory_byte", "integer")
     .execute();
@@ -230,7 +230,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     )
     .addColumn("task_data_id", "uuid", (col) => col.notNull().references("task_data.id").onDelete('cascade'))
     .addColumn("verdict", "text")
-    .addColumn("raw_score", "real")
+    .addColumn("score_raw", "real")
     .addColumn("running_time_ms", "integer")
     .addColumn("running_memory_byte", "integer")
     .execute();
@@ -317,6 +317,20 @@ export async function up(db: Kysely<any>): Promise<void> {
   await db.schema.createIndex("idx_contests_slug").on("contests").columns(["slug"]).execute();
 
   await db.schema
+    .createTable("overall_verdicts")
+    .addColumn("user_id", "uuid", (col) => col.notNull().references("users.id").onDelete("cascade"))
+    .addColumn("task_id", "uuid", (col) => col.notNull().references("tasks.id").onDelete("cascade"))
+    .addColumn("contest_id", "uuid", (col) => col.references("contests.id").onDelete("set null"))
+    .addColumn("score_overall", "double precision")
+    .addColumn("score_max", "double precision")
+    .addUniqueConstraint(
+      "idx_overall_verdicts_contest_id_user_id_task_id",
+      ["contest_id", "user_id", "task_id"],
+      (eb) => eb.nullsNotDistinct(),
+    )
+    .execute();
+
+  await db.schema
     .alterTable("submissions")
     .addForeignKeyConstraint("fk_submissions_contest_id", ["contest_id"], "contests", ["id"])
     .onDelete("set null")
@@ -392,6 +406,7 @@ export async function down(db: Kysely<any>): Promise<void> {
   await db.schema.dropTable("contest_attachments").execute();
   await db.schema.dropTable("contest_tasks").execute();
   await db.schema.dropTable("contests").execute();
+  await db.schema.dropTable("overall_verdicts").execute();
   await db.schema.dropTable("verdict_task_data").execute();
   await db.schema.dropTable("verdict_subtasks").execute();
   await db.schema.dropTable("verdicts").execute();

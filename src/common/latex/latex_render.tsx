@@ -50,7 +50,7 @@ function LatexNodeAnyX({ node, source }: LatexNodeProps<LatexNode>): React.React
     case "displaymath":
       return <LatexNodeDisplayMathX node={node} source={source} />;
     case "parbreak":
-      return <br />;
+      return <div className="block mb-3.5" />;
     case "macro":
       return <LatexNodeMacroX node={node} source={source} />;
     case "environment":
@@ -113,6 +113,7 @@ function LatexNodeDisplayMathX({ node, source }: LatexNodeProps<LatexNodeDisplay
 }
 
 function LatexNodeMacroX({ node, source }: LatexNodeProps<LatexNodeMacro>): React.ReactNode {
+
   switch (node.content) {
     case "bf":
     case "textbf":
@@ -171,6 +172,33 @@ function LatexNodeMacroX({ node, source }: LatexNodeProps<LatexNodeMacro>): Reac
           {renderArgumentContent(node.args, source, 1)}
         </a>
       );
+    }
+    case "section": {
+      const maybeStar = getStringArg(node.args, 0);
+      if (maybeStar == '*') {
+        return <h3 className="text-3xl font-bold">{renderArgumentContent(node.args, source, 1)}</h3>;
+      } else if (maybeStar == null) {
+        return <h3 className="text-3xl font-bold">1. {renderArgumentContent(node.args, source, 1)}</h3>;
+      }
+      return renderBroken(node, source);
+    }
+    case "subsection": {
+      const maybeStar = getStringArg(node.args, 0);
+      if (maybeStar == '*') {
+        return <h4 className="text-2xl font-bold">{renderArgumentContent(node.args, source, 1)}</h4>;
+      } else if (maybeStar == null) {
+        return <h4 className="text-2xl font-bold">1. {renderArgumentContent(node.args, source, 1)}</h4>;
+      }
+      return renderBroken(node, source);
+    }
+    case "subsubsection": {
+      const maybeStar = getStringArg(node.args, 0);
+      if (maybeStar == '*') {
+        return <h5 className="text-xl font-bold">{renderArgumentContent(node.args, source, 1)}</h5>;
+      } else if (maybeStar == null) {
+        return <h5 className="text-xl font-bold">1. {renderArgumentContent(node.args, source, 1)}</h5>;
+      }
+      return renderBroken(node, source);
     }
     case "includegraphics": {
       // Don't use the second arg yet

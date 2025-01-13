@@ -69,6 +69,15 @@ export const LATEX_MACROS = {
   href: {
     signature: "m m",
   },
+  "section": {
+    signature: "s m",
+  },
+  "subsection": {
+    signature: "s m",
+  },
+  "subsubsection": {
+    signature: "s m",
+  },
   includegraphics: {
     signature: "o m",
   },

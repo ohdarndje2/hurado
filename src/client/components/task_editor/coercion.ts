@@ -5,6 +5,7 @@ import {
   TaskSubtaskDTO,
   TaskDataDTO,
   TaskScriptDTO,
+  TaskSampleIO_DTO,
 } from "common/validation/task_validation";
 import {
   TaskCreditED,
@@ -13,6 +14,7 @@ import {
   TaskDataED,
   TaskScriptED,
   TaskCheckerED,
+  TaskSampleIO_ED,
 } from "./types";
 import { CheckerKind, Language, TaskType } from "common/types/constants";
 import { CommonAttachmentED, EditorKind } from "../common_editor";
@@ -55,6 +57,7 @@ export function coerceTaskED(dto: TaskDTO): TaskED {
     type: dto.type,
     flavor: 'flavor' in dto ? dto.flavor : null,
     subtasks: dto.subtasks.map((x) => coerceTaskSubtaskED(x)),
+    sample_IO: dto.sample_IO.map((x) => coerceTaskSampleIO(x)),
   };
   return task;
 }
@@ -129,4 +132,14 @@ function coerceTaskScriptED(dto: TaskScriptDTO): TaskScriptED {
       hash: dto.file_hash,
     },
   }
+}
+
+function coerceTaskSampleIO(dto: TaskSampleIO_DTO): TaskSampleIO_ED {
+  return {
+    kind: EditorKind.Saved,
+    id: dto.id as string,
+    input: dto.input,
+    output: dto.output,
+    explanation: dto.explanation,
+  };
 }

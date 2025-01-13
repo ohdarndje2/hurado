@@ -59,6 +59,13 @@ export async function getEditorTask(uuid: string): Promise<TaskDTO | null> {
     .orderBy("order")
     .execute();
 
+  const sample_IO = await db
+    .selectFrom("task_sample_io")
+    .select(["id", "order", "input", "output", "explanation"])
+    .where("task_id", "=", task.id)
+    .orderBy("order")
+    .execute();
+
   const data =
     subtasks.length > 0
       ? await db
@@ -124,6 +131,12 @@ export async function getEditorTask(uuid: string): Promise<TaskDTO | null> {
         score_max: sub.score_max,
         data: data.filter((d) => d.subtask_id === sub.id).map(dbToTaskDataBatchDTO),
       })),
+      sample_IO: sample_IO.map((io) => ({
+        id: io.id,
+        input: io.input,
+        output: io.output,
+        explanation: io.explanation,
+      })),
     };
     return taskdto;
   } else if (task.type === TaskType.OutputOnly) {
@@ -163,6 +176,12 @@ export async function getEditorTask(uuid: string): Promise<TaskDTO | null> {
         name: sub.name,
         score_max: sub.score_max,
         data: data.filter((d) => d.subtask_id === sub.id).map(dbToTaskDataOutputDTO),
+      })),
+      sample_IO: sample_IO.map((io) => ({
+        id: io.id,
+        input: io.input,
+        output: io.output,
+        explanation: io.explanation,
       })),
     };
 
@@ -208,6 +227,12 @@ export async function getEditorTask(uuid: string): Promise<TaskDTO | null> {
         name: sub.name,
         score_max: sub.score_max,
         data: data.filter((d) => d.subtask_id === sub.id).map(dbToTaskDataCommunicationDTO),
+      })),
+      sample_IO: sample_IO.map((io) => ({
+        id: io.id,
+        input: io.input,
+        output: io.output,
+        explanation: io.explanation,
       })),
     };
 

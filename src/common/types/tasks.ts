@@ -75,6 +75,15 @@ export type TaskDataTable = {
   judge_file_hash: string;
 };
 
+export type TaskSampleIOTable = {
+  id: Generated<string>;
+  task_id: string;
+  order: number;
+  input: string;
+  output: string;
+  explanation: string;
+};
+
 export type Task = Selectable<TaskTable>;
 export type TaskCreate = Insertable<TaskTable>;
 export type TaskUpdate = Updateable<TaskTable>;
@@ -88,6 +97,7 @@ export type TaskViewerCommonDTO = {
   statement: string;
   score_max: number;
   credits: TaskViewerCreditDTO[];
+  sample_IO: TaskViewerSampleIO_DTO[];
 };
 
 export type TaskViewerDTO = TaskViewerBatchDTO | TaskViewerCommunicationDTO | TaskViewerOutputDTO;
@@ -115,6 +125,12 @@ export type TaskViewerSubtaskOutputDTO = {
 export type TaskViewerCreditDTO = {
   name: string;
   role: string;
+};
+
+export type TaskViewerSampleIO_DTO = {
+  input: string;
+  output: string;
+  explanation: string;
 };
 
 export type TaskSummaryDTO = Pick<Task, "title" | "slug" | "description">;

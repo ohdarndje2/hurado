@@ -6,6 +6,7 @@ import { REGEX_SLUG } from "./common_validation";
 export type TaskCreditDTO = z.infer<typeof zTaskCredit>;
 export type TaskAttachmentDTO = z.infer<typeof zTaskAttachment>;
 export type TaskScriptDTO = z.infer<typeof zTaskScript>;
+export type TaskSampleIO_DTO = z.infer<typeof zTaskSampleIO>;
 
 export type TaskBatchDTO = z.infer<typeof zTaskTypeBatch>;
 export type TaskSubtaskBatchDTO = z.infer<typeof zTaskSubtaskBatch>;
@@ -36,6 +37,13 @@ const zTaskAttachment = z.object({
   file_hash: z.string().min(1),
 });
 
+const zTaskSampleIO = z.object({
+  id: z.string().uuid().optional(),
+  input: z.string(),
+  output: z.string(),
+  explanation: z.string(),
+});
+
 const zTaskScript = z.object({
   id: z.string().uuid().optional(),
   file_name: z.string().min(1),
@@ -55,6 +63,7 @@ const zTaskCommon = {
   credits: z.array(zTaskCredit),
   attachments: z.array(zTaskAttachment),
   scripts: z.array(zTaskScript),
+  sample_IO: z.array(zTaskSampleIO),
 };
 
 const zTaskDataBatch = z.object({

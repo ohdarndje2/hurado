@@ -25,6 +25,7 @@ const users: Insertable<UserTable>[] = [
     school: "University of the Philippines - Diliman",
     name: "Kevin Sogo",
     role: "admin",
+    kompgen_token: "kevinsogosogokevin",
   },
   {
     id: "e7cbd74d-aa7c-477e-a17d-e558e63000dd",
@@ -34,6 +35,7 @@ const users: Insertable<UserTable>[] = [
     school: "Ateneo de Manila University",
     name: "Vernon Sago",
     role: "admin",
+    kompgen_token: "ittakesgutztobe",
   },
   {
     id: "abfaecfe-5dd8-4f2a-81b1-d66efe22279e",
@@ -43,6 +45,7 @@ const users: Insertable<UserTable>[] = [
     school: "Ateneo de Manila University",
     name: "Cisco Sugoi",
     role: "user",
+    kompgen_token: "shisukodesu",
   },
 ];
 

@@ -66,29 +66,28 @@ type TaskCardProps = {
 export function TaskCard({ task }: TaskCardProps) {
   const url = getPath({ kind: Path.TaskView, slug: task.slug });
 
-  let top_class = classNames(styles["card-top"], styles["card-top-default"]);
+  let top_class = classNames(styles["card-top"], "group-hover:bg-gray-150");
   let pbar_class = classNames(styles["card-bar"], styles["card-bar-default"]);
   let pbar_style = {width: "0%"};
 
   if (task.score_overall == null || task.score_max == null) {   // no attempts
     // pass
   } else if (task.score_overall == 0 || task.score_max == 0) {  // has attempts, binary score
-    pbar_class = classNames(styles["card-bar"], styles["card-bar-wa"])
+    pbar_class = classNames(styles["card-bar"], "bg-yellow-800")
     pbar_style = { width: "100%" };
   } else { // partial score or accepted
-    pbar_class = classNames(styles["card-bar"], styles["card-bar-ac"])
+    pbar_class = classNames(styles["card-bar"], "bg-green-400")
     pbar_style = {
       width: `${Math.min(100, Math.max(0, task.score_overall/task.score_max*100))}%`,
     };
 
     if (task.score_overall == task.score_max)
     {
-      top_class = classNames(styles["card-top"], styles["card-top-accepted"]);
+      top_class = classNames(styles["card-top"], "bg-green-100 group-hover:bg-green-200");
     } 
   }
-
   return (
-    <Link className={styles["card"]} key={task.slug} href={url} >
+    <Link className={classNames("group")} key={task.slug} href={url} >
       <div className={top_class}>
         <h2 className="text-2xl mb-1">{task.title}</h2>
         <p className="font-light">

@@ -1,31 +1,14 @@
-.card {
-  border-radius: 1rem;
-}
 
 .card-top {
   width: 50rem;
   max-width: 100%;
   padding: 1rem;
 
-  border: 1px solid black;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  border-top: 1px solid black;
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
-}
-
-.card-top-default {
-  background-color: inherit;
-}
-
-.card:hover .card-top-default {
-  background-color: var(--darken);
-}
-
-.card-top-accepted {
-  background-color: rgb(184, 253, 208)
-}
-
-.card:hover .card-top-accepted {
-  background-color: rgb(125, 207, 154)
 }
 
 .card-bottom {
@@ -34,6 +17,7 @@
   padding: 0;
   overflow: hidden;
   
+  background-color: #cccccc;
   border-left: 1px solid black;
   border-right: 1px solid black;
   border-bottom: 1px solid black;
@@ -42,20 +26,5 @@
 }
 
 .card-bar {
-  padding: .5rem;
-}
-
-.card-bar-default 
-{
-  background-color: inherit;
-}
-
-.card-bar-wa 
-{
-  background-color: rgb(197, 181, 34)
-}
-
-.card-bar-ac 
-{
-  background-color: rgb(34, 197, 94)
+  padding: .25rem;
 }

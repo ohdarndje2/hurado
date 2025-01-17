@@ -7,6 +7,7 @@ import { LANGUAGE_SPECS } from "./judge_compile";
 import { ISOLATE_BIN, IsolateInstance, IsolateUtils, makeContestantArgv } from "./judge_utils";
 import { Verdict } from "common/types/constants";
 import { UnreachableError } from "common/errors";
+import { getWallTimeLimit, LIMITS_JUDGE_MEMORY_LIMIT_KB, LIMITS_JUDGE_TIME_LIMIT_SECONDS } from "./judge_constants";
 
 export async function evaluateTaskDataForCommunication(
   context: JudgeEvaluationContextCommunication,
@@ -77,6 +78,11 @@ function makeCommunicatorArgv(opts: {
   judge_file_name: string;
 }): string[] {
   const { communicator, isolate, task_root, output_root, input_file_name, judge_file_name } = opts;
+
+  const timeLimit = `${LIMITS_JUDGE_TIME_LIMIT_SECONDS}`;
+  const wallTimeLimit = `${getWallTimeLimit(LIMITS_JUDGE_TIME_LIMIT_SECONDS)}`;
+  const memLimit = `${LIMITS_JUDGE_MEMORY_LIMIT_KB}`;
+
   const spec = LANGUAGE_SPECS[communicator.language];
   const argv: string[] = [
     `--box-id=${isolate.name}`,
@@ -84,6 +90,10 @@ function makeCommunicatorArgv(opts: {
     `--dir=/output=${output_root}:rw`,
     "--chdir=/task",
     `--meta=${isolate.meta}`,
+    `--time=${timeLimit}`,
+    `--wall-time=${wallTimeLimit}`,
+    `--mem=${memLimit}`,
+    "--processes=1",
     "--run",
     "--",
   ];

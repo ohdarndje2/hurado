@@ -156,7 +156,7 @@ export function makeContestantArgv(
   const timeLimit = `${timeLimitSeconds}`;
   const wallTimeLimit = `${getWallTimeLimit(timeLimitSeconds)}`;
   const memLimit = task.memory_limit_byte != null
-    ? `${task.memory_limit_byte / 1000}`
+    ? `${Math.floor(task.memory_limit_byte / 1000)}`
     : `${LIMITS_DEFAULT_RUN_MEMORY_LIMIT_KB}`;
 
     const argv: string[] = [

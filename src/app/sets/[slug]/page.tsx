@@ -1,14 +1,14 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cache } from "react";
-import { ProblemSetViewerDTO, TaskSummaryDTO } from "common/types";
+import { ProblemSetViewerDTO, TaskScoredSummaryDTO, TaskSummaryDTO } from "common/types";
 import { db } from "db";
 import { DefaultLayout } from "client/components/layouts/default_layout";
 import { ProblemSetViewer } from "client/components/problem_set_viewer/problem_set_viewer";
 import { canManageProblemSets } from "server/authorization";
 import { getSession } from "server/sessions";
 
-async function getProblemSetData(slug: string): Promise<ProblemSetViewerDTO | null> {
+async function getProblemSetData(slug: string, userId: string | null): Promise<ProblemSetViewerDTO | null> {
   return db.transaction().execute(async (trx) => {
     const set = await trx
       .selectFrom("problem_sets")
@@ -25,19 +25,29 @@ async function getProblemSetData(slug: string): Promise<ProblemSetViewerDTO | nu
       .innerJoin("problem_set_tasks", "tasks.id", "problem_set_tasks.task_id")
       .orderBy(["problem_set_tasks.order", "tasks.title"])
       .where("problem_set_tasks.set_id", "=", set.id)
+      .leftJoin("overall_verdicts", (join) => 
+        join
+          .onRef("overall_verdicts.task_id", "=", "tasks.id")
+          .on("overall_verdicts.user_id", "=", userId)
+          .on("overall_verdicts.contest_id", "is", null)
+      )
       .select([
         "tasks.id",
         "tasks.slug",
         "tasks.title",
         "tasks.description",
+        "overall_verdicts.score_overall",
+        "overall_verdicts.score_max",
       ])
       .execute();
 
-    const tasks: TaskSummaryDTO[] = dbTasks.map((t) => ({
+    const tasks: TaskScoredSummaryDTO[] = dbTasks.map((t) => ({
       id: t.id,
       slug: t.slug,
       title: t.title,
       description: t.description,
+      score_overall: t.score_overall,
+      score_max: t.score_max,
     }));
 
     return {
@@ -61,7 +71,8 @@ type ProblemSetPageProps = {
 };
 
 export async function generateMetadata(props: ProblemSetPageProps): Promise<Metadata | null> {
-  const set = await getCachedProblemSetData(props.params.slug);
+  const session = await getSession();
+  const set = await getCachedProblemSetData(props.params.slug, session?.user?.id ?? null);
 
   if (set == null) {
     return null;
@@ -75,13 +86,13 @@ export async function generateMetadata(props: ProblemSetPageProps): Promise<Meta
 
 
 async function Page(props: ProblemSetPageProps) {
-  const set = await getCachedProblemSetData(props.params.slug);
+  const session = await getSession();
+  const set = await getCachedProblemSetData(props.params.slug, session?.user?.id ?? null);
 
   if (set == null) {
     return notFound();
   }
 
-  const session = await getSession();
   const canEdit = canManageProblemSets(session);
   return (
     <DefaultLayout>

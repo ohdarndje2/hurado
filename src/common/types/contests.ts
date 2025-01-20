@@ -1,5 +1,5 @@
 import { Generated, Selectable } from "kysely";
-import { TaskSummaryDTO } from "./tasks";
+import { TaskScoredSummaryDTO, TaskSummaryDTO } from "./tasks";
 
 export type ContestTable = {
   id: Generated<string>;
@@ -43,5 +43,5 @@ export type ContestSummaryDTO = Pick<Contest, "title" | "slug" | "description">;
 
 export type ContestViewerKeys = "id" | "slug" | "title" | "description" | "statement" | "start_time" | "end_time";
 export type ContestViewerDTO = Pick<Contest, ContestViewerKeys> & {
-  tasks: TaskSummaryDTO[];
+  tasks: TaskScoredSummaryDTO[];
 };

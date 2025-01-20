@@ -5,10 +5,10 @@ import { db } from "db";
 import { DefaultLayout } from "client/components/layouts/default_layout";
 import { canManageContests } from "server/authorization";
 import { getSession } from "server/sessions";
-import { ContestViewerDTO, TaskSummaryDTO } from "common/types";
+import { ContestViewerDTO, TaskScoredSummaryDTO, TaskSummaryDTO } from "common/types";
 import { ContestViewer } from "client/components/contest_viewer/contest_viewer";
 
-async function getContestData(slug: string): Promise<ContestViewerDTO | null> {
+async function getContestData(slug: string, userId: string | null): Promise<ContestViewerDTO | null> {
   return db.transaction().execute(async (trx) => {
     const contest = await trx
       .selectFrom("contests")
@@ -25,19 +25,29 @@ async function getContestData(slug: string): Promise<ContestViewerDTO | null> {
       .innerJoin("contest_tasks", "tasks.id", "contest_tasks.task_id")
       .orderBy(["contest_tasks.order", "tasks.title"])
       .where("contest_tasks.contest_id", "=", contest.id)
+      .leftJoin("overall_verdicts", (join) => 
+        join
+          .onRef("overall_verdicts.task_id", "=", "tasks.id")
+          .on("overall_verdicts.user_id", "=", userId)
+          .on("overall_verdicts.contest_id", "is", null)
+      )
       .select([
         "tasks.id",
         "tasks.slug",
         "tasks.title",
         "tasks.description",
+        "overall_verdicts.score_overall",
+        "overall_verdicts.score_max",
       ])
       .execute();
 
-    const tasks: TaskSummaryDTO[] = dbTasks.map((t) => ({
+    const tasks: TaskScoredSummaryDTO[] = dbTasks.map((t) => ({
       id: t.id,
       slug: t.slug,
       title: t.title,
       description: t.description,
+      score_overall: t.score_overall,
+      score_max: t.score_max,
     }));
 
     return {
@@ -75,13 +85,13 @@ export async function generateMetadata(props: ContestPageProps): Promise<Metadat
 };
 
 async function Page(props: ContestPageProps) {
-  const contest = await getContestData(props.params.slug);
+  const session = await getSession();
+  const contest = await getContestData(props.params.slug, session?.user?.id ?? null);
 
   if (contest == null) {
     return notFound();
   }
 
-  const session = await getSession();
   const canEdit = canManageContests(session);
 
   return (

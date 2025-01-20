@@ -1,5 +1,5 @@
 import { Generated, Insertable, Selectable, Updateable } from "kysely";
-import { TaskSummaryDTO } from "./tasks";
+import { TaskScoredSummaryDTO, TaskSummaryDTO } from "./tasks";
 
 export type ProblemSetTable = {
   id: Generated<string>;
@@ -27,7 +27,7 @@ export type ProblemSetViewerDTO = {
   description: string;
   is_public: boolean;
   order: number;
-  tasks: TaskSummaryDTO[];
+  tasks: TaskScoredSummaryDTO[];
 };
 
 export type ProblemSetSummaryDTO = {

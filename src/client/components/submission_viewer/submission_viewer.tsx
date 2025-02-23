@@ -162,11 +162,31 @@ const SubtaskVerdictViewer = ({ subtask, subtaskIndex }: SubtaskVerdictViewerPro
     score = <span className="font-medium">N/A</span>;
   }
 
+  const running_times = subtask.data.some(data => data.running_time_ms == null) ? [] : subtask.data.map(data => data.running_time_ms).filter(notNull);
+  const worst = running_times.length == 0 ? null : running_times.reduce((a, b) => Math.max(a, b));
+
   return (
     <div className="mt-4 first:mt-0">
       <div className="flex items-center px-4 py-2 rounded-t-lg bg-blue-300">
         <div className="text-lg">Subtask #{subtaskIndex + 1}</div>
-        <div className="ml-auto">Score: {score}</div>
+        <div className="ml-auto flex flex-row gap-4">
+          {
+            worst == null
+              ? null
+              : (
+                <div>
+                  Time: {
+                    worst < 1000
+                      ? `${worst} ms`
+                      : `${worst/1000} s`
+                  }
+                </div>
+              )
+          }
+          <div>
+            Score: {score}
+          </div>
+        </div>
       </div>
       <div className="grid grid-cols-4 px-4 py-2 border border-t-0 border-gray-300 rounded-b-lg">
         {subtask.data.map((data, dataIndex) => (
@@ -209,7 +229,7 @@ const TaskDataVerdictViewer = ({ data, dataIndex }: TaskDataVerdictViewerProps) 
       break;
   }
 
-  const hVerdict = data.verdict != null ? humanizeVerdict(data.verdict) : "Pending";
+  const hVerdict = data.verdict != null ? humanizeVerdict(data.verdict, null) : "Pending";
   const hRuntime = data.running_time_ms != null ? `Time: ${data.running_time_ms}ms` : null;
   const hMemory = data.running_memory_byte != null ? `Memory: ${data.running_memory_byte}b` : null;
   const hoverText = [hVerdict, hRuntime, hMemory].filter(notNull).join("\n");

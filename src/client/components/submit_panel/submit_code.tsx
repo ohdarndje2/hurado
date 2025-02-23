@@ -25,8 +25,9 @@ type SubmitCodeProps = {
 };
 
 export const SubmitCode = ({ taskId }: SubmitCodeProps) => {
+  const savedLanguage = localStorage.getItem('_language');
   const [code, setCode] = useState<string>("");
-  const [language, setLanguage] = useState<Language>(Language.Python3);
+  const [language, setLanguage] = useState<Language>(Object.values(Language).includes(savedLanguage as Language) ? savedLanguage as Language : Language.Python3);
   const [submitting, setSubmitting] = useState(false);
 
   const submissions = useContext(SubmissionsCacheContext);
@@ -37,6 +38,7 @@ export const SubmitCode = ({ taskId }: SubmitCodeProps) => {
   }, []);
 
   const onChangeLanguage = useCallback((event: SelectChangeEvent) => {
+    localStorage.setItem('_language', event.target.value);
     setLanguage(event.target.value as Language);
   }, []);
 

@@ -60,7 +60,7 @@ export const TaskViewerDetails = memo(({ time_limit_ms, memory_limit_byte, class
               >
                 Memory Limit:
               </span>
-              {` ${(memory_limit_byte/(1 << 20)).toLocaleString([], { maximumFractionDigits: 2 })} MB`}
+              {` ${(memory_limit_byte/1000000).toLocaleString([], { maximumFractionDigits: 0 })} MB`}
             </div>
           )
       }

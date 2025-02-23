@@ -95,6 +95,8 @@ export type TaskViewerCommonDTO = {
   description: string | null;
   statement: string;
   score_max: number;
+  time_limit_ms: number | null;
+  memory_limit_byte: number | null;
   credits: TaskViewerCreditDTO[];
   sample_IO: TaskViewerSampleIO_DTO[];
 };

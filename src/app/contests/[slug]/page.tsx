@@ -72,7 +72,7 @@ type ContestPageProps = {
 };
 
 export async function generateMetadata(props: ContestPageProps): Promise<Metadata | null> {
-  const contest = await getCachedContestData(props.params.slug);
+  const contest = await getCachedContestData(props.params.slug, null);
 
   if (contest == null) {
     return null;

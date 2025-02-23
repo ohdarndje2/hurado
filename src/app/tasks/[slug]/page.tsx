@@ -14,7 +14,7 @@ async function getTaskData(slug: string): Promise<TaskViewerDTO | null> {
   return db.transaction().execute(async (trx) => {
     const task = await trx
       .selectFrom("tasks")
-      .select(["id", "slug", "title", "description", "statement", "score_max", "type", "flavor"])
+      .select(["id", "slug", "title", "description", "statement", "score_max", "type", "flavor", "time_limit_ms", "memory_limit_byte"])
       .where("slug", "=", slug)
       .executeTakeFirst();
 
@@ -47,6 +47,8 @@ async function getTaskData(slug: string): Promise<TaskViewerDTO | null> {
         credits: credits,
         type: task.type,
         sample_IO,
+        time_limit_ms: task.time_limit_ms,
+        memory_limit_byte: task.memory_limit_byte,
       };
     } else if (task.type === TaskType.Communication) {
       return {
@@ -59,6 +61,8 @@ async function getTaskData(slug: string): Promise<TaskViewerDTO | null> {
         credits: credits,
         type: task.type,
         sample_IO,
+        time_limit_ms: task.time_limit_ms,
+        memory_limit_byte: task.memory_limit_byte,
       };
     } else if (task.type === TaskType.OutputOnly) {
       const dbSubtasks = await trx
@@ -100,6 +104,8 @@ async function getTaskData(slug: string): Promise<TaskViewerDTO | null> {
         flavor: task.flavor as TaskFlavor,
         subtasks: subtasks,
         sample_IO,
+        time_limit_ms: null,
+        memory_limit_byte: null,
       };
     } else {
       throw new UnreachableError(task.type);

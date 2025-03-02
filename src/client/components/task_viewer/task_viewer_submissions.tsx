@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import { TaskViewerDTO } from "common/types";
 import { SubmissionsCache } from "client/submissions";
-import { TaskViewerTitle } from "./task_viewer_utils";
 import { OverallScoreDisplay, SubmissionsTable } from "client/components/submissions_table";
 import http from "client/http";
 import { APIPath, getAPIPath } from "client/paths";
 import { OverallVerdictDisplayDTO } from "common/types/verdicts";
+import { TaskViewerTitle } from "./task_viewer_utils";
 
 type TaskViewerSubmissionsProps = {
   task: TaskViewerDTO;
@@ -18,6 +18,7 @@ export const TaskViewerSubmissions = ({ task, cache }: TaskViewerSubmissionsProp
       return cache.submissions;
     }
     return cache.loadUserTaskSubmissions(task.id);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- pre-existing error before eslint inclusion
   }, [cache]);
   
   const [overallVerdict, setOverallVerdict] = useState<OverallVerdictDisplayDTO | undefined>(undefined);
@@ -32,6 +33,7 @@ export const TaskViewerSubmissions = ({ task, cache }: TaskViewerSubmissionsProp
       setOverallVerdict(overall_verdict.verdict as OverallVerdictDisplayDTO | undefined);
     };
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- pre-existing error before eslint inclusion
   }, []);
 
   return (

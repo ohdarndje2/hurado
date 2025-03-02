@@ -2,9 +2,10 @@ import { useSession } from "client/sessions";
 import { TaskViewerDTO } from "common/types";
 import { LatexDisplay } from "client/components/latex_display";
 import { SubmitPanel } from "client/components/submit_panel";
-import { TaskViewerDetails, TaskViewerTitle } from "./task_viewer_utils";
-import { SampleIODisplay } from "../sample_io_display/sample_io_display";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- pre-existing error before eslint inclusion
 import { TaskType } from "common/types/constants";
+import { SampleIODisplay } from "../sample_io_display/sample_io_display";
+import { TaskViewerDetails, TaskViewerTitle } from "./task_viewer_utils";
 
 type TaskViewerStatementProps = {
   task: TaskViewerDTO;

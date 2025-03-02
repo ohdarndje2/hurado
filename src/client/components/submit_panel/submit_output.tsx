@@ -5,9 +5,9 @@ import { useCallback, useContext, useState } from "react";
 import { TaskViewerOutputDTO } from "common/types";
 import { TaskFlavor, TaskFlavorOutput } from "common/types/constants";
 import { SubmissionsCacheContext } from "client/submissions";
-import styles from "./submit_panel.module.css";
 import { InputChangeEvent } from "common/types/events";
 import { Arrays } from "common/utils/arrays";
+import styles from "./submit_panel.module.css";
 import { createSubmissionOutput, postSubmission } from "./submit_utils";
 
 export type SubtaskState = {
@@ -41,6 +41,7 @@ export function SubmitOutput({ task }: SubmitOutputProps) {
     const data = createSubmissionOutput(task, subtasks);
     await postSubmission(data, submissions, router);
     setSubmitting(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- pre-existing error before eslint inclusion
   }, [task, subtasks, submitting]);
 
   return (
@@ -93,6 +94,7 @@ function SubmitOutputSubtask({
         );
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- pre-existing error before eslint inclusion
     [subtasks, subtaskIndex]
   );
 
@@ -105,6 +107,7 @@ function SubmitOutputSubtask({
         })
       );
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- pre-existing error before eslint inclusion
     [subtasks, subtaskIndex]
   );
 

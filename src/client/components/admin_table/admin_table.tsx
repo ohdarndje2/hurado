@@ -1,11 +1,18 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- pre-existing error before eslint inclusion
 import { DetailedHTMLProps, HTMLAttributes, TableHTMLAttributes } from "react";
-import { DefaultLayout } from "client/components/layouts/default_layout";
-import { getSession } from "server/sessions";
-import { ForbiddenPage } from "server/errors/forbidden";
-import { canManageContests } from "server/authorization";
-import { ContestSummaryDTO } from "common/types";
-import { db } from "db";
 import classNames from "classnames";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- pre-existing error before eslint inclusion
+import { DefaultLayout } from "client/components/layouts/default_layout";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- pre-existing error before eslint inclusion
+import { getSession } from "server/sessions";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- pre-existing error before eslint inclusion
+import { ForbiddenPage } from "server/errors/forbidden";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- pre-existing error before eslint inclusion
+import { canManageContests } from "server/authorization";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- pre-existing error before eslint inclusion
+import { ContestSummaryDTO } from "common/types";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- pre-existing error before eslint inclusion
+import { db } from "db";
 
 type TableProps = DetailedHTMLProps<HTMLAttributes<HTMLTableElement>, HTMLTableElement>;
 type TableSectionProps = DetailedHTMLProps<HTMLAttributes<HTMLTableSectionElement>, HTMLTableSectionElement>;

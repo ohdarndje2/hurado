@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { cookies } from "next/headers";
 import { db } from "db";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- pre-existing error before eslint inclusion
 import { SessionData, UserPublic } from "common/types";
 import { tokenizeSession } from "server/sessions";
 import { createUser } from "server/logic/users";
 import { zUserRegister } from "common/validation/user_validation";
 import { APISuccessResponse, APIValidationErrorType, customValidationError, makeSuccessResponse, zodValidationError } from "common/responses";
-import { cookies } from "next/headers";
 
 
 export type UserRegisterError = APIValidationErrorType<typeof zUserRegister>;

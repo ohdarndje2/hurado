@@ -1,5 +1,8 @@
 import classNames from "classnames";
 import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
+import { AxiosError, AxiosResponse } from "axios";
+import { toast } from "react-toastify";
 import { APIPath, getAPIPath, getPath, Path } from "client/paths";
 import {
   CommonEditorAttachments,
@@ -15,15 +18,13 @@ import {
   CommonEditorTableHeader,
   CommonEditorContent,
 } from "client/components/common_editor";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- pre-existing error before eslint inclusion
 import { ButtonClickEvent, InputChangeEvent } from "common/types/events";
 import { Arrays } from "common/utils/arrays";
+import http from "client/http";
+import { TaskLookupDTO } from "common/types";
 import { ContestED, ContestTaskED, ContestTaskTaskED } from "./types";
 import styles from "./contest_editor.module.css";
-import Link from "next/link";
-import http from "client/http";
-import { AxiosError, AxiosResponse } from "axios";
-import { TaskLookupDTO } from "common/types";
-import { toast } from "react-toastify";
 
 type ContestEditorDetailsProps = {
   contest: ContestED;
@@ -80,6 +81,7 @@ function ContestEditorAttachments({ contest, setContest }: ContestEditorAttachme
         attachments,
       });
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- pre-existing error before eslint inclusion
     [contest]
   );
 
@@ -119,6 +121,7 @@ export const ContestEditorTasks = ({ contest, setContest }: ContestEditorTasksPr
         },
       ],
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- pre-existing error before eslint inclusion
   }, [contest]);
 
   return (
@@ -165,6 +168,7 @@ const ContestTaskEditor = ({ task, taskIndex, contest, setContest }: ContestTask
         tasks: Arrays.replaceNth(contest.tasks, taskIndex, newTask),
       });
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- pre-existing error before eslint inclusion
     [contest, taskIndex]
   );
 
@@ -288,6 +292,7 @@ const ContestTaskPicker = (props: ContestTaskPickerProps) => {
     } finally {
       setSearching(false);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- pre-existing error before eslint inclusion
   }, [searching, text]);
 
   const onTaskClear = useCallback(() => {

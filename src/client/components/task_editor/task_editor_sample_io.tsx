@@ -1,8 +1,8 @@
 import { useCallback } from "react";
-import { CommonEditorAddButton, CommonEditorInput, EditorKind } from "../common_editor";
-import { TaskED, TaskSampleIO_ED } from "./types";
 import { InputChangeEvent } from "common/types/events";
+import { CommonEditorAddButton, CommonEditorInput, EditorKind } from "../common_editor";
 import BoxIcon from "../box_icon";
+import { TaskED, TaskSampleIO_ED } from "./types";
 
 type TaskEditorSampleProps = {
   task: TaskED;
@@ -23,6 +23,7 @@ export const TaskEditorSampleIO = ({ task, setTask }: TaskEditorSampleProps) => 
         },
       ],
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- pre-existing error before eslint inclusion
   }, [task]);
 
   return (
@@ -51,6 +52,7 @@ type TaskSampleIOEditorProps = {
 };
 
 const TaskSampleIOEditor = ({ sample, sampleIndex, task, setTask }: TaskSampleIOEditorProps) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks -- pre-existing error before eslint inclusion
   const updateField = (field: 'input' | 'output' | 'explanation') => useCallback(
     (event: InputChangeEvent) => {
       const samples = [...task.sample_IO];
@@ -61,6 +63,7 @@ const TaskSampleIOEditor = ({ sample, sampleIndex, task, setTask }: TaskSampleIO
         sample_IO: samples,
       });
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- pre-existing error before eslint inclusion
     [task, setTask],
   );
 
@@ -73,6 +76,7 @@ const TaskSampleIOEditor = ({ sample, sampleIndex, task, setTask }: TaskSampleIO
         sample_IO: samples,
       });
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- pre-existing error before eslint inclusion
     [task, setTask],
   );
 

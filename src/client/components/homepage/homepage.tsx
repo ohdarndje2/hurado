@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import Link from "next/link";
+import { ComponentType, DetailedHTMLProps, HTMLAttributes, ReactNode } from "react";
 import { getPath, Path } from "client/paths";
 import FreeSVG from 'assets/icons/free.svg';
 import FastSVG from 'assets/icons/fast.svg';
@@ -7,10 +8,9 @@ import ChallengeSVG from 'assets/icons/challenge.svg';
 import CreativeSVG from 'assets/icons/creative.svg';
 import DOSTSEI from 'assets/images/dost-sei.png'
 import { Navbar } from "../navbar";
+import { Footer } from "../footer";
 import styles from "./homepage.module.css";
 import { FaqAnswer, FaqItem, FaqQuestion } from "./homepage_faq";
-import { Footer } from "../footer";
-import { ComponentType, DetailedHTMLProps, HTMLAttributes, ReactNode } from "react";
 
 
 const HeroBanner = () => {
@@ -60,6 +60,7 @@ const Features = () => {
     <div className="bg-blue-450 px-6 pt-10 pb-6">
       <div className="max-w-[64rem] mx-auto">
         <h2 className="text-white text-4xl font-semibold text-center mb-4">
+          {/* eslint-disable-next-line react/no-unescaped-entities -- pre-existing error before eslint inclusion */}
           What's in Hurado?
         </h2>
         <div className="flex flex-col gap-4 justify-center lg:flex-row lg:justify-around mx-12">
@@ -91,6 +92,7 @@ const Faqs = () => {
         <div className="">
           <FaqItem>
             <FaqQuestion>
+              {/* eslint-disable-next-line react/no-unescaped-entities -- pre-existing error before eslint inclusion */}
               What is an "online judge"?
             </FaqQuestion>
             <FaqAnswer>
@@ -102,6 +104,7 @@ const Faqs = () => {
               Why would anyone want to do this?
             </FaqQuestion>
             <FaqAnswer>
+              {/* eslint-disable-next-line react/no-unescaped-entities -- pre-existing error before eslint inclusion */}
               It's fun! And educational!
             </FaqAnswer>
           </FaqItem>
@@ -143,6 +146,7 @@ type SponsorItemProps = {
 const SponsorItem = ({ name, logo }: SponsorItemProps) => {
   return (
     <div className="flex flex-col items-center mb-4">
+      {/* eslint-disable-next-line @next/next/no-img-element -- pre-existing error before eslint inclusion */}
       <img src={logo} alt={`${name} logo`} className="w-32 h-32 mb-4"/>
       <div className="text-black text-xl font-semibold">
         {name}

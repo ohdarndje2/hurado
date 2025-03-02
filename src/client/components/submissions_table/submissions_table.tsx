@@ -7,8 +7,8 @@ import { uuidToHuradoID } from "common/utils/uuid";
 import { humanizeTimeAgo } from "common/utils/dates";
 import { getPath, Path } from "client/paths";
 import { getVerdictColorClass } from "client/verdicts";
-import styles from "./submission_table.module.css";
 import { OverallVerdictDisplayDTO } from "common/types/verdicts";
+import styles from "./submission_table.module.css";
 
 type SubmissionTableProps = {
   loaded: boolean;
@@ -18,6 +18,7 @@ type SubmissionTableProps = {
 };
 
 export const SubmissionsTable = ({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- pre-existing error before eslint inclusion
   loaded,
   submissions,
   loadSubmissions,
@@ -25,6 +26,7 @@ export const SubmissionsTable = ({
 }: SubmissionTableProps) => {
   useEffect(() => {
     loadSubmissions();
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- pre-existing error before eslint inclusion
   }, []);
 
   return (
@@ -46,6 +48,7 @@ type SubmissionRowProps = {
   showUser: boolean;
 };
 
+// eslint-disable-next-line react/display-name -- pre-existing error before eslint inclusion
 const SubmissionRow = memo(({ submission, showUser }: SubmissionRowProps) => {
   const textVerdict =
     submission.verdict_id == null
@@ -87,6 +90,7 @@ type SubmissionCellProps = {
   children?: ReactNode;
 };
 
+// eslint-disable-next-line react/display-name -- pre-existing error before eslint inclusion
 const SubmissionHeader = memo(({ className, children }: SubmissionCellProps) => {
   return (
     <div
@@ -100,6 +104,7 @@ const SubmissionHeader = memo(({ className, children }: SubmissionCellProps) => 
   );
 });
 
+// eslint-disable-next-line react/display-name -- pre-existing error before eslint inclusion
 const SubmissionCell = memo(({ className, children }: SubmissionCellProps) => {
   return (
     <div
@@ -118,6 +123,7 @@ type OverallScoreProps = {
   className?: string,
 };
 
+// eslint-disable-next-line react/display-name -- pre-existing error before eslint inclusion
 export const OverallScoreDisplay = memo(({ overallVerdict, className }: OverallScoreProps) => {
   if (overallVerdict == undefined) {
     return null;

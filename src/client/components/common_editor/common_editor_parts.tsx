@@ -10,14 +10,14 @@ import {
   PropsWithChildren,
   useRef,
 } from "react";
+import { toast } from "react-toastify";
 import BoxIcon from "client/components/box_icon";
 import { InputChangeEvent, SelectChangeEvent, TextAreaChangeEvent } from "common/types/events";
+import { getPath, Path } from "client/paths";
+import { Scrollable } from "../scrollable";
 import { destructivelyComputeSHA1, IncompleteHashesException } from "./common_editor_utils";
 import styles from "./common_editor.module.css";
-import { Scrollable } from "../scrollable";
-import { toast } from "react-toastify";
 import { CommonFileED, CommonFileLocal, EditorKind } from "./types";
-import { getPath, Path } from "client/paths";
 
 type CommonEditorPageProps = {
   isStatement: boolean;
@@ -67,6 +67,7 @@ type CommonEditorFooterProps<T> = {
   saveObject(object: T): Promise<SaveResult<T>>;
 };
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- pre-existing error before eslint inclusion
 export const CommonEditorFooter = <T extends {}>({
   initial,
   object,
@@ -95,6 +96,7 @@ export const CommonEditorFooter = <T extends {}>({
     } finally {
       setSaving(false);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- pre-existing error before eslint inclusion
   }, [object, saveObject]);
 
   return (
@@ -355,10 +357,12 @@ export const CommonEditorFileInput = (props: CommonEditorFileInputProps) => {
       destructivelyComputeSHA1(newFile);
       onFileChange(newFile, curr.name);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- pre-existing error before eslint inclusion
   }, [file, filename, onFileChange]);
 
   const onFileRemove = useCallback(() => {
     onFileChange(null, "");
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- pre-existing error before eslint inclusion
   }, [file, filename, onFileChange]);
 
   const onNameChange = useCallback(

@@ -1,12 +1,12 @@
+import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import { TaskType } from "common/types/constants";
 import { REGEX_SLUG } from "common/validation/common_validation";
 import { zTaskSubtaskBatch, zTaskSubtaskCommunication, zTaskSubtaskOutput } from "common/validation/task_validation";
 import { db } from "db";
-import { NextRequest, NextResponse } from "next/server";
 import { canManageTasks } from "server/authorization";
 import { upsertTaskData, upsertTaskSubtasks } from "server/logic/tasks/update_editor_task";
 import { getSession } from "server/sessions";
-import { z } from "zod";
 
 // Updates only a subset of the properties that kg knows about, and
 //   DOESN'T OVERWRITE THE OTHER PROPERTIES!!!
@@ -83,11 +83,13 @@ async function updateKgTask(task: KgTaskDTO) {
       ])
       .executeTakeFirstOrThrow();
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- pre-existing error before eslint inclusion
     const { subtasks: dbSubtasks, subtasksWithData } = await upsertTaskSubtasks(
       trx,
       task.id,
       task.subtasks
     );
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- pre-existing error before eslint inclusion
     const dbTaskData = await upsertTaskData(trx, subtasksWithData);
 
     return {

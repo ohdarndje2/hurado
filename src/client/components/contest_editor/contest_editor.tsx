@@ -14,11 +14,11 @@ import {
   CommonEditorPage,
 } from "client/components/common_editor";
 import commonStyles from "client/components/common_editor/common_editor.module.css";
+import { getPath, Path } from "client/paths";
 import { ContestED } from "./types";
 import { saveContest } from "./contest_editor_saving";
 import { coerceContestED } from "./contest_coercion";
 import { ContestEditorDetails } from "./contest_editor_details";
-import { getPath, Path } from "client/paths";
 import { ContestEditorAdvanced } from "./contest_editor_advanced";
 
 type ContestEditorProps = {
@@ -112,6 +112,7 @@ type ContestEditorTabProps = {
   slug: string;
 };
 
+// eslint-disable-next-line react/display-name -- pre-existing error before eslint inclusion
 export const ContestEditorTabComponent = memo(({ tab, slug }: ContestEditorTabProps) => {
   const viewURL = getPath({ kind: Path.ContestView, slug: slug });
 

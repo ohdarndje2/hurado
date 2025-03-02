@@ -5,6 +5,8 @@ import type { editor } from "monaco-editor";
 import MonacoEditor, { Monaco } from "@monaco-editor/react";
 import { useCallback, useContext, useRef, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 import {
   SubmissionViewerDTO,
   SubmissionViewerFileDTO,
@@ -18,10 +20,8 @@ import { uuidToHuradoID } from "common/utils/uuid";
 import BoxIcon from "client/components/box_icon";
 import { getPath, Path } from "client/paths";
 import { getVerdictColorClass } from "client/verdicts";
-import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
-import { rejudgeSubmission } from "../submit_panel/submit_utils";
 import { SubmissionsCacheContext } from "client/submissions";
+import { rejudgeSubmission } from "../submit_panel/submit_utils";
 import button_styles from "../submit_panel/submit_panel.module.css";
 type SubmissionViewerProps = {
   submission: SubmissionViewerDTO;
@@ -255,6 +255,7 @@ const SubmissionCodeViewer = ({ submission }: SubmissionViewerProps) => {
 
   // Magic code that resizes the editor, mostly stolen from:
   // https://github.com/microsoft/monaco-editor/issues/794#issuecomment-427092969
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- pre-existing error before eslint inclusion
   const onEditorMount = useCallback((editor: editor.IStandaloneCodeEditor, monaco: Monaco) => {
     if (containerRef.current == null) {
       return;
@@ -319,10 +320,14 @@ export const RejudgeButton = ({ submission, isAdmin }: SubmissionViewerProps & {
     return null;
   }
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks -- pre-existing error before eslint inclusion
   const [rejudging, setRejudging] = useState(false);
+  // eslint-disable-next-line react-hooks/rules-of-hooks -- pre-existing error before eslint inclusion
   const router = useRouter();
+  // eslint-disable-next-line react-hooks/rules-of-hooks -- pre-existing error before eslint inclusion
   const submissions = useContext(SubmissionsCacheContext);
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks -- pre-existing error before eslint inclusion
   const rejudge = useCallback(async () => {
     if (rejudging) {
       return;
@@ -337,6 +342,7 @@ export const RejudgeButton = ({ submission, isAdmin }: SubmissionViewerProps & {
     router.push(getPath({ kind: Path.Submission, uuid: submission.id }));
 
     setRejudging(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- pre-existing error before eslint inclusion
   }, []);
 
   return (

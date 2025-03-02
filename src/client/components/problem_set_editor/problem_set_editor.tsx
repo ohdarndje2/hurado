@@ -5,6 +5,7 @@ import classNames from "classnames";
 import Link from "next/link";
 import { ReactNode, memo, useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
+import { useParams } from "next/navigation";
 import { Navbar } from "client/components/navbar";
 import {
   CommonEditorFooter,
@@ -36,7 +37,6 @@ import { ProblemSetED, ProblemSetTaskED } from "./types";
 import { coerceProblemSetED } from "./problem_set_coercion";
 import { saveProblemSet } from "./problem_set_editor_saving";
 import styles from "./problem_set_editor.module.css";
-import { useParams } from "next/navigation";
 
 type ProblemSetEditorProps = {
   dto: ProblemSetEditorDTO;
@@ -148,6 +148,7 @@ export const ProblemSetEditorTasks = ({ problemSet, setProblemSet }: ProblemSetE
         },
       ],
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- pre-existing error before eslint inclusion
   }, [problemSet]);
 
   return (
@@ -187,6 +188,7 @@ const ProblemSetTaskEditor = ({ task, taskIndex, problemSet, setProblemSet }: Pr
         tasks: Arrays.replaceNth(problemSet.tasks, taskIndex, newTask),
       });
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- pre-existing error before eslint inclusion
     [problemSet, taskIndex]
   );
 
@@ -284,6 +286,7 @@ const ProblemSetTaskPicker = (props: ProblemSetTaskPickerProps) => {
     } finally {
       setSearching(false);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- pre-existing error before eslint inclusion
   }, [searching, text]);
 
   const onTaskClear = useCallback(() => {
@@ -330,6 +333,7 @@ type ProblemSetEditorTabProps = {
   slug: string;
 };
 
+// eslint-disable-next-line react/display-name -- pre-existing error before eslint inclusion
 export const ProblemSetEditorTabComponent = memo(({ tab, slug }: ProblemSetEditorTabProps) => {
   const viewURL = getPath({ kind: Path.ProblemSetView, slug });
 

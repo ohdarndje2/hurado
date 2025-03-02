@@ -1,8 +1,8 @@
 import classNames from "classnames";
-import { getPath, Path } from "client/paths";
-import { useSession } from "client/sessions";
 import Link from "next/link";
 import { memo } from "react";
+import { getPath, Path } from "client/paths";
+import { useSession } from "client/sessions";
 
 export enum TaskViewerTab {
   Statement = "statement",
@@ -54,6 +54,7 @@ type TaskViewerTabProps = {
   canEdit: boolean;
 };
 
+// eslint-disable-next-line react/display-name -- pre-existing error before eslint inclusion
 export const TaskViewerTabComponent = memo(
   ({ className, tab, taskId, canEdit }: TaskViewerTabProps) => {
     const session = useSession();

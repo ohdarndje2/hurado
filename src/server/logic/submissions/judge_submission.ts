@@ -1,3 +1,4 @@
+import { Transaction } from "kysely";
 import { db } from "db";
 import type {
   JudgeChecker,
@@ -11,7 +12,6 @@ import type {
 import { JudgeFiles } from "server/logic/judgements/judge_files";
 import { JudgeRunner } from "server/logic/judgements/judge_runner";
 import { CheckerKind, Language, TaskType } from "common/types/constants";
-import { Transaction } from "kysely";
 import { Models } from "common/types";
 import { TaskConfigurationError, UnreachableError } from "common/errors";
 
@@ -22,8 +22,11 @@ export async function judgeSubmission(submissionId: string) {
     return [sub, tsk];
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- pre-existing error before eslint inclusion
   let tTaskRoot: string | null = null;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- pre-existing error before eslint inclusion
   let tOutputRoot: string | null = null;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- pre-existing error before eslint inclusion
   let tSubmissionRoot: string | null = null;
   try {
     const pTask = JudgeFiles.setupTask(task).then((newTaskRoot) => {

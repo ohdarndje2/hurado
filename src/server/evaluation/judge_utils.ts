@@ -191,7 +191,7 @@ export function runChildProcess(args: string[]): Promise<number> {
   return new Promise((resolve) => {
     const child = ChildProcess.spawn(args[0], args.slice(1));
 
-    child.on("close", (code) => {
+    child.on("exit", (code) => {
       resolve(code ?? 0);
     });
   });

@@ -1,4 +1,5 @@
 import ChildProcess from "child_process";
+import { UnreachableCheck } from "common/errors";
 import { Language, ProgrammingLanguage, Verdict } from "common/types/constants";
 import { JudgeScript, JudgeSubmission, JudgeTaskBatch, JudgeTaskCommunication } from "common/types/judge";
 import { CompilationResult } from "./types";
@@ -12,16 +13,6 @@ type LanguageSpec = {
 };
 
 export const LANGUAGE_SPECS: Record<ProgrammingLanguage, LanguageSpec> = {
-  [Language.Python3]: {
-    getExecutableName: (source: string) => {
-      return source;
-    },
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- pre-existing error before eslint inclusion
-    getCompileCommand: (source: string, exe: string) => {
-      return null;
-    },
-    interpreter: "/usr/bin/python3",
-  },
   [Language.CPP]: {
     getExecutableName: (source: string) => {
       return removeLastExtension(source);
@@ -35,10 +26,30 @@ export const LANGUAGE_SPECS: Record<ProgrammingLanguage, LanguageSpec> = {
     getExecutableName: (source: string) => {
       return removeLastExtension(source);
     },
-    getCompileCommand: (source: string, exe: string) => {
-      return ["/usr/bin/g++", "-O2", "-std=c++17", "-o", exe, source];
+    getCompileCommand: (source: string, _exe: string) => {
+      return ["/usr/bin/javac", source];
     },
     interpreter: "/usr/bin/java",
+  },
+  [Language.Python3]: {
+    getExecutableName: (source: string) => {
+      return source;
+    },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- pre-existing error before eslint inclusion
+    getCompileCommand: (source: string, exe: string) => {
+      return null;
+    },
+    interpreter: "/usr/bin/python3",
+  },
+  [Language.PyPy3]: {
+    getExecutableName: (source: string) => {
+      return source;
+    },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- pre-existing error before eslint inclusion
+    getCompileCommand: (source: string, exe: string) => {
+      return null;
+    },
+    interpreter: "/usr/bin/pypy3",
   },
 };
 
@@ -53,8 +64,8 @@ export async function compileSubmission(
   const exeName = spec.getExecutableName(srcName);
   return compileLocalSource(
     language,
-    task.time_limit_ms,
-    task.memory_limit_byte,
+    task.compile_time_limit_ms,
+    task.compile_memory_limit_byte,
     submissionDir,
     srcName,
     exeName,
@@ -65,7 +76,7 @@ export async function compileJudgeScriptAndMutate(
   script: JudgeScript,
   taskDir: string
 ): Promise<JudgeScript> {
-  // Note: This function mutates JudgeScript!!
+  // Note: This function mutates the JudgeScript argument!!
   const specs = LANGUAGE_SPECS[script.language];
   const srcName = script.file_name;
   const exeName = specs.getExecutableName(srcName);
@@ -113,6 +124,7 @@ export async function compileLocalSource(
   return IsolateUtils.with(async (isolate) => {
     const argv: string[] = [
       `--box-id=${isolate.name}`,
+      "--dir=/opt/lang=/opt/lang",
       `--dir=/mount=${root}:rw`,
       "--chdir=/mount",
       "--env=PATH",
@@ -160,10 +172,15 @@ export function getLanguageFilename(language: Language) {
     case Language.CPP:
       return "main.cpp";
     case Language.Java:
-      return "main.java";
+      return "Main.java";
     case Language.Python3:
       return "main.py";
+    case Language.PyPy3:
+      return "main.py";
+    case Language.PlainText:
+      return "main.txt";
     default:
+      UnreachableCheck(language);
       return "main.txt";
   }
 }

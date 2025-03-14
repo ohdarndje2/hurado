@@ -144,6 +144,7 @@ async function judgeTask<Type extends TaskType>(
   let running_memory_byte = 0;
 
   let score_max = 0;
+  const is_compile_error = compilation !== null && compilation.verdict !== Verdict.Accepted;
   const verdict_cache = new Map<string, JudgeVerdictTaskData>();
   for (const subtask of task.subtasks) {
     const child = await judgeSubtask(
@@ -153,6 +154,7 @@ async function judgeTask<Type extends TaskType>(
       subtask as JudgeSubtaskFor<Type>,
       dbVerdict.id,
       verdict_cache,
+      is_compile_error, // Compile Error, skip all
     );
     allVerdictSubtasks.push(child);
 
@@ -164,6 +166,9 @@ async function judgeTask<Type extends TaskType>(
   }
   if (0 < score_raw && score_raw < score_max) {
     verdict = Verdict.Partial;
+  }
+  if (is_compile_error) {
+    verdict = Verdict.CompileError;
   }
 
   await db
@@ -199,7 +204,8 @@ async function judgeSubtask<Type extends TaskType>(
   task: JudgeTaskFor<Type>,
   subtask: JudgeSubtaskFor<Type>,
   verdict_id: string,
-  verdict_cache: Map<string, JudgeVerdictTaskData>
+  verdict_cache: Map<string, JudgeVerdictTaskData>,
+  doomed_subtask: boolean = false,
 ): Promise<JudgeVerdictSubtask> {
   const dbSubtask = await db
     .insertInto("verdict_subtasks")
@@ -215,7 +221,7 @@ async function judgeSubtask<Type extends TaskType>(
   let score_scaled = subtask.score_max;
   let running_time_ms = 0;
   let running_memory_byte = 0;
-  let bad_subtask = false;
+  let bad_subtask = doomed_subtask;
   for (const data of subtask.data) {
     const child = await judgeTaskData(
       type,
@@ -331,7 +337,9 @@ async function judgeTaskData<Type extends TaskType>(
     running_time_ms: result.running_time_ms,
     running_memory_byte: result.running_memory_byte,
   };
-  verdict_cache.set(task_data.judge_file_hash, returnResult);
+  if (returnResult.verdict !== Verdict.Skipped) {
+    verdict_cache.set(task_data.judge_file_hash, returnResult);
+  }
   return returnResult;
 }
 

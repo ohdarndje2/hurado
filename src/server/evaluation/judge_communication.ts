@@ -3,6 +3,7 @@ import ChildProcess from "child_process";
 import { JudgeChecker, JudgeScript, JudgeTaskCommunication, JudgeTaskDataCommunication } from "common/types/judge";
 import { Verdict } from "common/types/constants";
 import { UnreachableError } from "common/errors";
+import { FORWARD_CHILD_STDERR } from "server/secrets";
 import { EvaluationResult, IsolateResult, JudgeEvaluationContextCommunication } from "./types";
 import { checkSubmissionOutput } from "./judge_checker";
 import { LANGUAGE_SPECS } from "./judge_compile";
@@ -30,11 +31,12 @@ export async function evaluateTaskDataForCommunication(
       judge_file_name: data.judge_file_name,
     });
 
-    const procContestant = ChildProcess.spawn(ISOLATE_BIN, argvContestant);
-    const procCommunicator = ChildProcess.spawn(ISOLATE_BIN, argvCommunicator);
-    procContestant.stdout.pipe(procCommunicator.stdin);
-    procCommunicator.stdout.pipe(procContestant.stdin);
-    procCommunicator.stderr.pipe(process.stderr);
+    const procContestant = ChildProcess.spawn(ISOLATE_BIN, argvContestant, {
+      stdio: ["pipe", "pipe", FORWARD_CHILD_STDERR ? process.stderr : "ignore"],
+    });
+    const procCommunicator = ChildProcess.spawn(ISOLATE_BIN, argvCommunicator, {
+      stdio: [procContestant.stdout, procContestant.stdin, FORWARD_CHILD_STDERR ? process.stderr : "ignore"],
+    });
 
     const promiseContestant = new Promise<void>((resolve) => {
       procContestant.on("exit", () => {

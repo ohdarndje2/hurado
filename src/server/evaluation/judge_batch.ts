@@ -1,10 +1,10 @@
 import fs from "fs";
 import path from "path";
-import { WriteStream } from "tty";
 import ChildProcess from "child_process";
 import { ContestantScript, JudgeTaskBatch, JudgeTaskDataBatch } from "common/types/judge";
 import { Verdict } from "common/types/constants";
 import { UnreachableError } from "common/errors";
+import { FORWARD_CHILD_STDERR } from "server/secrets";
 import { EvaluationResult, IsolateResult, JudgeEvaluationContextBatch } from "./types";
 import { checkSubmissionOutput } from "./judge_checker";
 import { ISOLATE_BIN, IsolateUtils, makeContestantArgv } from "./judge_utils";
@@ -22,7 +22,6 @@ export async function evaluateTaskDataForBatch(
     context.submission_root,
     inputPath,
     outputPath,
-    process.stderr
   );
   switch (isolateResult.verdict) {
     case Verdict.RuntimeError:
@@ -65,7 +64,6 @@ async function runContestantScript(
   submissionRoot: string,
   inputPath: string,
   outputPath: string,
-  stderr: WriteStream | null
 ): Promise<IsolateResult> {
   return IsolateUtils.with(async (isolate) => {
     const argv = makeContestantArgv(task, script, isolate, submissionRoot);
@@ -75,7 +73,7 @@ async function runContestantScript(
 
     try {
       const child = ChildProcess.spawn(ISOLATE_BIN, argv, {
-        stdio: [inputFile.fd, outputFile.fd, stderr],
+        stdio: [inputFile.fd, outputFile.fd, FORWARD_CHILD_STDERR ? process.stderr : "ignore"],
       });
 
       const promise = new Promise<IsolateResult>((resolve) => {

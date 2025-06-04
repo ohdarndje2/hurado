@@ -158,7 +158,7 @@ function makeTasks(ids: Map<string, string>, hashes: Map<string, string>): TaskD
       statement: [
         "Alvin, Berto, and Carlo are friends. Their ages are $A$, $B$ and $C$, respectively. No two of them have the same age. Who is the oldest among them?",
         "The input contains three lines. The first line contains a single integer, $A$. The second line contains a single integer, $B$. The third line contains a single integer, $C$.",
-        "Output the name of the oldest among the three, which should be either Alvin, Berto or Carlo.",
+        "Output the name of the oldest among the three, which should be either Alvin, Berto or Carl.",
       ].join("\n"),
       description: "Determine the oldest among friends.",
       is_public: true,
